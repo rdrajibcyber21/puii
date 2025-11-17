@@ -17,7 +17,13 @@ export const getDashboard = async (req, res, next) => {
 
 export const getReports = async (req, res, next) => {
   try {
-    const reports = await listReports({ limit: Number(req.query.limit ?? 50) });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { limit } = matchedData(req, { locations: ['query'] });
+    const reports = await listReports({ limit });
     return res.json({ data: reports });
   } catch (error) {
     console.log('print the report error', error);

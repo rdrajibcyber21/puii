@@ -68,9 +68,13 @@ export const postEvent = async (req, res, next) => {
 
 export const getEvents = async (req, res, next) => {
   try {
-    const limit = Number(req.query.limit ?? 100);
-    const offset = Number(req.query.offset ?? 0);
-    const events = await listEvents({ limit, offset });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { limit, offset } = matchedData(req, { locations: ['query'] });
+    const events = await listEvents({ limit: limit ?? 100, offset: offset ?? 0 });
     return res.json({ data: events });
   } catch (error) {
     return next(error);

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 import {
   getAlerts,
   postAlert,
@@ -10,7 +10,7 @@ export const alertsRouter = Router();
 
 alertsRouter
   .route('/')
-  .get(getAlerts)
+  .get(query('limit').optional().isInt({ min: 1 }).toInt(), getAlerts)
   .post(
     body('eventId').isUUID(),
     body('severity').isIn(['low', 'medium', 'high', 'critical']),
