@@ -5,8 +5,13 @@ import { emitAlert } from '../lib/realtime.js';
 
 export const getAlerts = async (req, res, next) => {
   try {
-    const limit = Number(req.query.limit ?? 50);
-    const alerts = await listAlerts({ limit });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { limit } = matchedData(req, { locations: ['query'] });
+    const alerts = await listAlerts({ limit: limit ?? 50 });
     return res.json({ data: alerts });
   } catch (error) {
     return next(error);

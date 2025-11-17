@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 import {
   getPolicies,
   postPolicy,
@@ -34,7 +34,7 @@ policiesRouter
 
 policiesRouter
   .route('/blocked')
-  .get(getBlockedSources)
+  .get(query('limit').optional().isInt({ min: 1 }).toInt(), getBlockedSources)
   .post(
     body('sourceIp').isIP(),
     body('reason').isString().isLength({ min: 3 }),

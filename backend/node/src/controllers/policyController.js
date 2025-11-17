@@ -56,7 +56,13 @@ export const deletePolicyHandler = async (req, res, next) => {
 
 export const getBlockedSources = async (req, res, next) => {
   try {
-    const blocked = await listBlockedSources({ limit: Number(req.query.limit ?? 50) });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { limit } = matchedData(req, { locations: ['query'] });
+    const blocked = await listBlockedSources({ limit: limit ?? 50 });
     return res.json({ data: blocked });
   } catch (error) {
     return next(error);
