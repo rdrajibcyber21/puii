@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import apiClient from '../api/client.js';
+import { SAMPLE_BLOCKED_SOURCES, SAMPLE_POLICIES } from '../lib/fallbackData.js';
 
 export const usePolicies = () => {
   const [policies, setPolicies] = useState([]);
@@ -14,8 +15,12 @@ export const usePolicies = () => {
       ]);
       setPolicies(policyRes.data.data);
       setBlockedSources(blockedRes.data.data);
+      setError(null);
     } catch (err) {
-      setError(err.response?.data?.message || 'Unable to load policies');
+      console.warn('API unavailable, using fallback policies data', err);
+      setPolicies(SAMPLE_POLICIES);
+      setBlockedSources(SAMPLE_BLOCKED_SOURCES);
+      setError('API unavailable. Showing sample policies and blocked sources.');
     }
   };
 

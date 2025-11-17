@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import apiClient from '../api/client.js';
+import { SAMPLE_REPORTS } from '../lib/fallbackData.js';
 
 export const useReports = () => {
   const [reports, setReports] = useState([]);
@@ -13,7 +14,9 @@ export const useReports = () => {
       setReports(data.data);
       setError(null);
     } catch (err) {
-      setError(err.response?.data?.message || 'Unable to load reports');
+      console.warn('API unavailable, using fallback reports data', err);
+      setReports(SAMPLE_REPORTS);
+      setError('API unavailable. Showing sample reports.');
     } finally {
       setLoading(false);
     }

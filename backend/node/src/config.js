@@ -18,6 +18,12 @@ export const config = {
     adminEmail: required('ADMIN_EMAIL', 'rajib@puii.local'),
     adminPassword: required('ADMIN_PASSWORD', 'raj12345'),
     tokenTtlSeconds: Number(process.env.JWT_TTL_SECONDS ?? 3600),
+    // Enable a development bypass to simplify local testing when auth is not critical.
+    // Auth is enforced only when explicitly enabled.
+    skipAuth:
+      process.env.ENABLE_AUTH === 'true'
+        ? false
+        : process.env.SKIP_AUTH !== 'false' && process.env.NODE_ENV !== 'production',
   },
   mysql: {
     host: required('MYSQL_HOST', 'localhost'),
