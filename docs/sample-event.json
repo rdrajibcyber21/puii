@@ -1,0 +1,12 @@
+{
+  "sourceIp": "198.51.100.42",
+  "destinationIp": "10.0.0.12",
+  "protocol": "TCP",
+  "payloadSize": 1240,
+  "metadata": {
+    "byte_entropy": 7.1,
+    "failed_auth": 12,
+    "geo_distance": 8450,
+    "is_anomaly": true
+  }
+}
