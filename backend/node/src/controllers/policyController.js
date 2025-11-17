@@ -10,22 +10,15 @@ import {
 import { DatabaseError } from '../lib/db.js';
 import { logger } from '../lib/logger.js';
 import { SAMPLE_BLOCKED_SOURCES, SAMPLE_POLICIES } from '../lib/fallbackData.js';
-<<<<<<< HEAD
 
 const isDatabaseUnavailable = (error) => error instanceof DatabaseError || error?.statusCode === 503;
-=======
->>>>>>> 82ed4e5 (Add fallbacks for policy and report endpoints)
 
 export const getPolicies = async (req, res, next) => {
   try {
     const policies = await listPolicies();
     return res.json({ data: policies });
   } catch (error) {
-<<<<<<< HEAD
     if (isDatabaseUnavailable(error)) {
-=======
-    if (error instanceof DatabaseError) {
->>>>>>> 82ed4e5 (Add fallbacks for policy and report endpoints)
       logger.warn('Database unavailable, serving fallback policies');
       return res.json({ data: SAMPLE_POLICIES });
     }
@@ -81,11 +74,7 @@ export const getBlockedSources = async (req, res, next) => {
     const blocked = await listBlockedSources({ limit: limit ?? 50 });
     return res.json({ data: blocked });
   } catch (error) {
-<<<<<<< HEAD
     if (isDatabaseUnavailable(error)) {
-=======
-    if (error instanceof DatabaseError) {
->>>>>>> 82ed4e5 (Add fallbacks for policy and report endpoints)
       logger.warn('Database unavailable, serving fallback blocked sources');
       const { limit } = matchedData(req, { locations: ['query'] });
       const normalizedLimit = Number.parseInt(limit ?? 50, 10);
