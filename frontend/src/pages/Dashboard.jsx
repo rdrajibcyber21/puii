@@ -17,7 +17,10 @@ const DashboardPage = () => {
     return <CircularProgress />;
   }
 
-  const averageScore = data ? data.averageThreatScore.toFixed(2) : '0.00';
+  const averageThreatScore = Number.parseFloat(data?.averageThreatScore);
+  const averageScore = Number.isFinite(averageThreatScore)
+    ? averageThreatScore.toFixed(2)
+    : '0.00';
 
   return (
     <Grid container spacing={3}>
@@ -25,7 +28,10 @@ const DashboardPage = () => {
         <MetricCard title="Average Threat Score" value={averageScore} caption="Last 24 hours" />
       </Grid>
       <Grid item xs={12} sm={4}>
-        <MetricCard title="Alerts (7d)" value={data?.alertsBySeverity.reduce((acc, row) => acc + Number(row.count), 0) || 0} />
+        <MetricCard
+          title="Alerts (7d)"
+          value={data?.alertsBySeverity?.reduce((acc, row) => acc + Number(row.count), 0) || 0}
+        />
       </Grid>
       <Grid item xs={12} sm={4}>
         <MetricCard title="Monitored Sources" value={data?.topSources.length || 0} />
