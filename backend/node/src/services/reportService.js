@@ -54,7 +54,17 @@ export const getDashboardMetrics = async () => {
   };
 };
 
-export const listReports = async ({ limit = 50 } = {}) => query(LIST_REPORTS, [limit]);
+const normalizeLimit = (limit) => {
+  const parsedLimit = Number.parseInt(limit ?? 50, 10);
+
+  if (Number.isNaN(parsedLimit) || parsedLimit <= 0) {
+    return 50;
+  }
+
+  return parsedLimit;
+};
+
+export const listReports = async ({ limit } = {}) => query(LIST_REPORTS, [normalizeLimit(limit)]);
 
 export const createReport = async ({ id, generatedBy, filters, summary }) => {
   await query(INSERT_REPORT, [id, generatedBy, JSON.stringify(filters ?? {}), summary]);

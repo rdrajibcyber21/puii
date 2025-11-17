@@ -17,7 +17,15 @@ const DashboardPage = () => {
     return <CircularProgress />;
   }
 
-  const averageScore = data ? data.averageThreatScore.toFixed(2) : '0.00';
+  const averageThreatScore = Number.parseFloat(data?.averageThreatScore);
+  const averageScore = Number.isFinite(averageThreatScore)
+    ? averageThreatScore.toFixed(2)
+    : '0.00';
+  const totalAlerts =
+    data?.alertsBySeverity?.reduce((acc, row) => acc + Number(row.count), 0) ?? 0;
+  const monitoredSources = data?.topSources?.length ?? 0;
+  const latestAlerts = alerts?.slice(0, 5) ?? [];
+  const recentEvents = events?.slice(0, 10) ?? [];
 
   return (
     <Grid container spacing={3}>
@@ -25,19 +33,19 @@ const DashboardPage = () => {
         <MetricCard title="Average Threat Score" value={averageScore} caption="Last 24 hours" />
       </Grid>
       <Grid item xs={12} sm={4}>
-        <MetricCard title="Alerts (7d)" value={data?.alertsBySeverity.reduce((acc, row) => acc + Number(row.count), 0) || 0} />
+        <MetricCard title="Alerts (7d)" value={totalAlerts} />
       </Grid>
       <Grid item xs={12} sm={4}>
-        <MetricCard title="Monitored Sources" value={data?.topSources.length || 0} />
+        <MetricCard title="Monitored Sources" value={monitoredSources} />
       </Grid>
       <Grid item xs={12} md={6}>
         <ThreatBreakdownChart data={data?.threatsByLabel || []} />
       </Grid>
       <Grid item xs={12} md={6}>
-        <AlertsList alerts={alerts.slice(0, 5)} />
+        <AlertsList alerts={latestAlerts} />
       </Grid>
       <Grid item xs={12}>
-        {eventLoading ? <CircularProgress /> : <EventTable events={events.slice(0, 10)} />}
+        {eventLoading ? <CircularProgress /> : <EventTable events={recentEvents} />}
       </Grid>
       <Snackbar open={Boolean(error || alertError)} autoHideDuration={6000}>
         <Alert severity="error">{error || alertError}</Alert>
