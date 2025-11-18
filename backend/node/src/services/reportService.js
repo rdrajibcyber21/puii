@@ -64,7 +64,20 @@ const normalizeLimit = (limit) => {
   return parsedLimit;
 };
 
-export const listReports = async ({ limit } = {}) => query(LIST_REPORTS, [normalizeLimit(limit)]);
+// export const listReports = async ({ limit } = {}) => query(LIST_REPORTS, [normalizeLimit(limit)]);
+
+export const listReports = async ({ limit } = {}) => {
+  const safeLimit = Number(normalizeLimit(limit));
+
+  const sql = `
+    SELECT id, generated_by, summary, created_at
+    FROM threat_reports
+    ORDER BY created_at DESC
+    LIMIT ${safeLimit}
+  `;
+
+  return query(sql);
+};
 
 export const createReport = async ({ id, generatedBy, filters, summary }) => {
   await query(INSERT_REPORT, [id, generatedBy, JSON.stringify(filters ?? {}), summary]);

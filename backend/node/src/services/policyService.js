@@ -1,7 +1,8 @@
 import { query } from '../lib/db.js';
 
 const LIST_POLICIES = `
-  SELECT * FROM response_policies
+  SELECT id, name, threshold, \`action\`, enabled, created_at
+  FROM response_policies
   ORDER BY created_at DESC
 `;
 
@@ -21,11 +22,14 @@ const DELETE_POLICY = `
   WHERE id = ?
 `;
 
-const LIST_BLOCKED = `
-  SELECT * FROM blocked_sources
+
+const LIST_BLOCKED = (limit) => `
+  SELECT *
+  FROM blocked_sources
   ORDER BY created_at DESC
-  LIMIT ?
+  LIMIT ${limit}
 `;
+
 
 const INSERT_BLOCKED = `
   INSERT INTO blocked_sources (source_ip, reason, expires_at)
@@ -46,7 +50,13 @@ export const deletePolicy = async (id) => {
   await query(DELETE_POLICY, [id]);
 };
 
-export const listBlockedSources = async ({ limit = 50 } = {}) => query(LIST_BLOCKED, [limit]);
+export const listBlockedSources = async ({ limit = 50 } = {}) => {
+  const safeLimit = parseInt(limit, 10);
+  const finalLimit = Number.isFinite(safeLimit) && safeLimit > 0 ? safeLimit : 50;
+
+  return query(LIST_BLOCKED(finalLimit));
+};
+
 
 export const addBlockedSource = async ({ sourceIp, reason, expiresAt }) => {
   await query(INSERT_BLOCKED, [sourceIp, reason, expiresAt]);

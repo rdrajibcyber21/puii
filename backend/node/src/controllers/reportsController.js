@@ -8,28 +8,38 @@ import {
 import { DatabaseError } from '../lib/db.js';
 import { logger } from '../lib/logger.js';
 import { SAMPLE_DASHBOARD_METRICS, SAMPLE_REPORTS } from '../lib/fallbackData.js';
-<<<<<<< HEAD
 
 const isDatabaseUnavailable = (error) => error instanceof DatabaseError || error?.statusCode === 503;
-=======
->>>>>>> 82ed4e5 (Add fallbacks for policy and report endpoints)
 
 export const getDashboard = async (req, res, next) => {
   try {
     const metrics = await getDashboardMetrics();
     return res.json(metrics);
   } catch (error) {
-<<<<<<< HEAD
     if (isDatabaseUnavailable(error)) {
-=======
-    if (error instanceof DatabaseError) {
->>>>>>> 82ed4e5 (Add fallbacks for policy and report endpoints)
       logger.warn('Database unavailable, serving fallback dashboard metrics');
       return res.json(SAMPLE_DASHBOARD_METRICS);
     }
     return next(error);
   }
 };
+
+// export const getReports = async (req, res, next) => {
+//   try {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+
+//     const { limit } = matchedData(req, { locations: ['query'] });
+//     const reports = await listReports({ limit });
+//     console.log('print the reports', reports);
+//     return res.json({ data: reports });
+//   } catch (error) {
+//     console.log('print the report error', error);
+//     return next(error);
+//   }
+// };
 
 export const getReports = async (req, res, next) => {
   try {
@@ -38,15 +48,20 @@ export const getReports = async (req, res, next) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { limit } = matchedData(req, { locations: ['query'] });
+    let { limit } = matchedData(req, { locations: ['query'] });
+
+    // FIX: Ensure limit is always a number
+    if (Array.isArray(limit)) {
+      limit = limit[0]; // take first value
+    }
+    limit = parseInt(limit ?? 50, 10);
+
     const reports = await listReports({ limit });
+    console.log('print the reports', reports);
+
     return res.json({ data: reports });
   } catch (error) {
-<<<<<<< HEAD
     if (isDatabaseUnavailable(error)) {
-=======
-    if (error instanceof DatabaseError) {
->>>>>>> 82ed4e5 (Add fallbacks for policy and report endpoints)
       logger.warn('Database unavailable, serving fallback reports');
       const { limit } = matchedData(req, { locations: ['query'] });
       const normalizedLimit = Number.parseInt(limit ?? 50, 10);
