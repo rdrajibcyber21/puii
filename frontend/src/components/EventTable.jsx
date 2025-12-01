@@ -69,7 +69,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-const EventTable = ({ events }) => (
+const EventTable = ({ events, onEventClick }) => (
   <Card elevation={4} sx={{ borderRadius: 3 }}>
     <CardContent>
       <Typography variant="h6" fontWeight="bold" mb={2}>
@@ -91,7 +91,12 @@ const EventTable = ({ events }) => (
 
         <TableBody>
           {events.map((event) => (
-            <TableRow key={event.id} hover sx={{ cursor: 'pointer' }}>
+            <TableRow
+              key={event.id}
+              hover
+              sx={{ cursor: 'pointer' }}
+              onClick={() => onEventClick && onEventClick(event)}
+            >
               <TableCell>{event.source_ip}</TableCell>
               <TableCell>{event.destination_ip}</TableCell>
               <TableCell>{event.protocol}</TableCell>

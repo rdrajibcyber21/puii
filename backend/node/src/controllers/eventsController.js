@@ -7,8 +7,15 @@ import { logger } from '../lib/logger.js';
 import { emitAlert } from '../lib/realtime.js';
 import { DatabaseError } from '../lib/db.js';
 import { SAMPLE_EVENTS } from '../lib/fallbackData.js';
+import {
+  eventsProcessedTotal,
+  eventsProcessingDuration,
+  threatScoreDistribution,
+} from '../lib/metrics.js';
 
 export const postEvent = async (req, res, next) => {
+  const processingStartTime = Date.now();
+
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -17,6 +24,8 @@ export const postEvent = async (req, res, next) => {
     const payload = matchedData(req);
     const eventId = uuid();
 
+    // Track ML scoring stage
+    const mlStartTime = Date.now();
     const mlResponse = await scoreTelemetry({
       event_id: eventId,
       source_ip: payload.sourceIp,
@@ -25,6 +34,7 @@ export const postEvent = async (req, res, next) => {
       payload_size: payload.payloadSize,
       metadata: payload.metadata,
     });
+    eventsProcessingDuration.observe({ stage: 'ml_scoring' }, (Date.now() - mlStartTime) / 1000);
 
     const {
       threat_score: threatScore,
@@ -34,6 +44,8 @@ export const postEvent = async (req, res, next) => {
       message = 'Automated threat assessment completed',
     } = mlResponse;
 
+    // Track database storage stage
+    const dbStartTime = Date.now();
     await createEvent({
       id: eventId,
       sourceIp: payload.sourceIp,
@@ -45,6 +57,7 @@ export const postEvent = async (req, res, next) => {
       threatLabel,
       responseAction,
     });
+    eventsProcessingDuration.observe({ stage: 'database_storage' }, (Date.now() - dbStartTime) / 1000);
 
     const alertPayload = {
       id: uuid(),
@@ -55,6 +68,12 @@ export const postEvent = async (req, res, next) => {
 
     await createAlert(alertPayload);
     emitAlert(alertPayload);
+
+    // Record event metrics
+    const totalDuration = (Date.now() - processingStartTime) / 1000;
+    eventsProcessingDuration.observe({ stage: 'total' }, totalDuration);
+    eventsProcessedTotal.inc({ threat_label: threatLabel, response_action: responseAction });
+    threatScoreDistribution.observe(threatScore);
 
     return res.status(201).json({
       id: eventId,

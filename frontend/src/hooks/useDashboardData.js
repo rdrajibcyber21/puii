@@ -21,6 +21,9 @@ export const useDashboardData = () => {
 
   useEffect(() => {
     load();
+    // Auto-refresh every 30 seconds
+    const interval = setInterval(load, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   return {

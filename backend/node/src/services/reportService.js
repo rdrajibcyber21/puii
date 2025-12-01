@@ -23,7 +23,7 @@ const TOP_SOURCES = `
   FROM network_events
   GROUP BY source_ip
   ORDER BY count DESC
-  LIMIT 5
+  LIMIT 500
 `;
 
 const LIST_REPORTS = `

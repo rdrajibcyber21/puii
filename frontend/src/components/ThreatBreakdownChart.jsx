@@ -41,8 +41,21 @@ import { Pie, PieChart, Tooltip, Cell, ResponsiveContainer } from 'recharts';
 
 const COLORS = ['#00bfa5', '#ffb74d', '#ff5252'];
 
-const ThreatBreakdownChart = ({ data }) => (
-  <Card elevation={4} sx={{ borderRadius: 3 }}>
+const ThreatBreakdownChart = ({ data, onClick }) => (
+  <Card
+    elevation={4}
+    sx={{
+      borderRadius: 3,
+      cursor: onClick ? 'pointer' : 'default',
+      transition: 'transform 0.2s',
+      '&:hover': onClick
+        ? {
+            transform: 'translateY(-4px)',
+          }
+        : {},
+    }}
+    onClick={onClick}
+  >
     <CardContent sx={{ height: 340 }}>
       <Typography variant="h6" fontWeight="bold" mb={2}>
         Threat Breakdown

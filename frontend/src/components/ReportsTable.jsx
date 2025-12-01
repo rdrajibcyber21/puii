@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-const ReportsTable = ({ reports }) => (
+const ReportsTable = ({ reports, onReportClick }) => (
   <Card>
     <CardContent>
       <Typography variant="h6" gutterBottom>
@@ -29,13 +29,25 @@ const ReportsTable = ({ reports }) => (
         </TableHead>
         <TableBody>
           {reports.map((report) => (
-            <TableRow key={report.id}>
+            <TableRow
+              key={report.id}
+              hover
+              sx={{ cursor: 'pointer' }}
+              onClick={() => onReportClick && onReportClick(report)}
+            >
               <TableCell>{report.id}</TableCell>
               <TableCell>{report.generated_by}</TableCell>
               <TableCell>{new Date(report.created_at).toLocaleString()}</TableCell>
               <TableCell>{report.summary?.slice(0, 80) || '—'}</TableCell>
               <TableCell align="right">
-                <Button size="small" variant="outlined">
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onReportClick && onReportClick(report);
+                  }}
+                >
                   View
                 </Button>
               </TableCell>

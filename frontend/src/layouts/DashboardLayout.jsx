@@ -1,4 +1,4 @@
-// import { Logout, Policy, Report, Security, Sensors, Shield } from '@mui/icons-material';
+// import { Logout, Policy, Report, Security, Sensors, Shield, Monitor } from '@mui/icons-material';
 // import {
 //   AppBar,
 //   Box,
@@ -114,7 +114,19 @@
 // export default DashboardLayout;
 
 
-import { Logout, Policy, Report, Security, Sensors, Shield } from '@mui/icons-material';
+import {
+  Logout,
+  Policy,
+  Report,
+  Security,
+  Sensors,
+  Shield,
+  Monitor,
+  Memory,
+  Description,
+  Assignment,
+  NetworkCheck,
+} from '@mui/icons-material';
 import {
   AppBar,
   Box,
@@ -140,6 +152,11 @@ const navItems = [
   { to: '/alerts', label: 'Alerts', icon: <Shield /> },
   { to: '/policies', label: 'Policies', icon: <Policy /> },
   { to: '/reports', label: 'Reports', icon: <Report /> },
+  { to: '/monitoring', label: 'Monitoring', icon: <Monitor /> },
+  { to: '/resources', label: 'Resources', icon: <Memory />, badge: 'Dev' },
+  { to: '/logs', label: 'Logs', icon: <Description />, badge: 'Dev' },
+  { to: '/tickets', label: 'Tickets', icon: <Assignment />, badge: 'Dev' },
+  { to: '/traffic-flow', label: 'Traffic Flow', icon: <NetworkCheck />, badge: 'Dev' },
 ];
 
 const drawerWidth = 240;
@@ -180,7 +197,29 @@ const DashboardLayout = () => {
             }}
           >
             <ListItemIcon sx={{ color: '#90caf9' }}>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} />
+            <ListItemText
+              primary={
+                <Box display="flex" alignItems="center" gap={1}>
+                  {item.label}
+                  {item.badge && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                        color: '#ff9800',
+                        px: 0.75,
+                        py: 0.25,
+                        borderRadius: 1,
+                        fontSize: '0.65rem',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      {item.badge}
+                    </Typography>
+                  )}
+                </Box>
+              }
+            />
           </ListItemButton>
         ))}
       </List>

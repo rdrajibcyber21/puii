@@ -6,14 +6,6 @@ const INSERT_EVENT = `
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
-const LIST_EVENTS = `
-  SELECT *
-  FROM network_events
-  ORDER BY created_at DESC
-  LIMIT ?
-  OFFSET ?
-`;
-
 export const createEvent = async ({
   id,
   sourceIp,
@@ -39,4 +31,19 @@ export const createEvent = async ({
   return id;
 };
 
-export const listEvents = async ({ limit = 100, offset = 0 } = {}) => query(LIST_EVENTS, [limit, offset]);
+export const listEvents = async ({ limit = 100, offset = 0 } = {}) => {
+  // Ensure limit and offset are integers (safe for string interpolation)
+  const safeLimit = parseInt(limit, 10) || 100;
+  const safeOffset = parseInt(offset, 10) || 0;
+  
+  // Use string interpolation for LIMIT/OFFSET to avoid prepared statement issues
+  const LIST_EVENTS = `
+    SELECT *
+    FROM network_events
+    ORDER BY created_at DESC
+    LIMIT ${safeLimit}
+    OFFSET ${safeOffset}
+  `;
+  
+  return query(LIST_EVENTS);
+};

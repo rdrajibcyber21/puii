@@ -45,22 +45,40 @@ const PolicyTable = ({ policies, onUpdate, onDelete, onCreate }) => {
           </TableHead>
           <TableBody>
             {policies.map((policy) => (
-              <TableRow key={policy.id}>
+              <TableRow
+                key={policy.id}
+                hover
+                sx={{ cursor: 'pointer' }}
+                onClick={(e) => {
+                  if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+                    onUpdate && typeof onUpdate === 'function' && onUpdate(policy.id, policy, 'view');
+                  }
+                }}
+              >
                 <TableCell>{policy.name}</TableCell>
                 <TableCell align="right">{policy.threshold}</TableCell>
                 <TableCell>{policy.action}</TableCell>
                 <TableCell>
                   <Switch
                     checked={Boolean(policy.enabled)}
-                    onChange={(event) => onUpdate(policy.id, {
-                      threshold: policy.threshold,
-                      action: policy.action,
-                      enabled: event.target.checked,
-                    })}
+                    onChange={(event) => {
+                      event.stopPropagation();
+                      onUpdate(policy.id, {
+                        threshold: policy.threshold,
+                        action: policy.action,
+                        enabled: event.target.checked,
+                      });
+                    }}
                   />
                 </TableCell>
                 <TableCell align="right">
-                  <Button color="error" onClick={() => onDelete(policy.id)}>
+                  <Button
+                    color="error"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(policy.id);
+                    }}
+                  >
                     Delete
                   </Button>
                 </TableCell>

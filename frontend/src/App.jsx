@@ -7,6 +7,11 @@ import EventsPage from './pages/Events.jsx';
 import AlertsPage from './pages/Alerts.jsx';
 import PoliciesPage from './pages/Policies.jsx';
 import ReportsPage from './pages/Reports.jsx';
+import MonitoringPage from './pages/Monitoring.jsx';
+import ResourcesMonitoringPage from './pages/ResourcesMonitoring.jsx';
+import LogsPage from './pages/Logs.jsx';
+import TicketsPage from './pages/Tickets.jsx';
+import TrafficFlowPage from './pages/TrafficFlow.jsx';
 import { useAuthContext } from './context/AuthContext.jsx';
 
 const ProtectedRoute = ({ children }) => {
@@ -44,6 +49,11 @@ const App = () => (
         <Route path="alerts" element={<AlertsPage />} />
         <Route path="policies" element={<PoliciesPage />} />
         <Route path="reports" element={<ReportsPage />} />
+        <Route path="monitoring" element={<MonitoringPage />} />
+        <Route path="resources" element={<ResourcesMonitoringPage />} />
+        <Route path="logs" element={<LogsPage />} />
+        <Route path="tickets" element={<TicketsPage />} />
+        <Route path="traffic-flow" element={<TrafficFlowPage />} />
       </Route>
     </Routes>
   </BrowserRouter>

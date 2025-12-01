@@ -71,7 +71,7 @@ const severityColors = {
   critical: '#ef5350',
 };
 
-const AlertsList = ({ alerts }) => (
+const AlertsList = ({ alerts, onAlertClick }) => (
   <Card elevation={4} sx={{ borderRadius: 3, height: '100%' }}>
     <CardContent>
       <Typography variant="h6" fontWeight="bold" mb={2}>
@@ -80,7 +80,15 @@ const AlertsList = ({ alerts }) => (
 
       <List>
         {alerts.map((alert) => (
-          <ListItem key={alert.id} sx={{ borderBottom: '1px solid #eee' }}>
+          <ListItem
+            key={alert.id}
+            sx={{
+              borderBottom: '1px solid #eee',
+              cursor: 'pointer',
+              '&:hover': { backgroundColor: 'rgba(0,0,0,0.04)' },
+            }}
+            onClick={() => onAlertClick && onAlertClick(alert)}
+          >
             <ListItemAvatar>
               <Avatar sx={{ backgroundColor: severityColors[alert.severity] || '#9c27b0' }}>
                 <PriorityHigh />
