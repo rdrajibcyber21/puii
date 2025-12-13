@@ -1,7 +1,12 @@
 # Python cache
-**/__pycache__/
+**/_pycache_/
 *.pyc
 *.pyo
+
+# Python virtual environments
+**/.venv/
+**/venv/
+.env
 
 # Node modules
 **/node_modules/
@@ -13,3 +18,6 @@
 
 # macOS files
 **/.DS_Store
+
+# Markdown
+*.md

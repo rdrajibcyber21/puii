@@ -29,7 +29,7 @@ export const config = {
     host: required('MYSQL_HOST', 'localhost'),
     port: Number(process.env.MYSQL_PORT ?? 3306),
     user: required('MYSQL_USER', 'root'),
-    password: required('MYSQL_PASSWORD', 'jit12345'),
+    password: required('MYSQL_PASSWORD', 'raj12345'),
     database: required('MYSQL_DATABASE', 'puii'),
     connectionLimit: Number(process.env.MYSQL_POOL_SIZE ?? 10),
   },

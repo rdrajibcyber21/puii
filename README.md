@@ -58,6 +58,7 @@ Key endpoints:
 cd backend/python
 cp .env.example .env          # set ML_SERVICE_API_KEY to match node config
 python3 -m venv .venv && source .venv/bin/activate
+watchmedo auto-restart  --pattern="*.py" --recursive -- python app.py
 pip install -r requirements.txt
 python app.py                 # starts on http://localhost:5000
 ```
