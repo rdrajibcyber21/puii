@@ -17,6 +17,61 @@ An end-to-end prototype of the PUII cybersecurity platform described in the acco
 
 See `docs/architecture.md` for a detailed component breakdown.
 
+## 📸 UI Screenshots
+
+### 🔐 Authentication
+
+![Login](screenshots/01-login.png)
+![Login Filled](screenshots/02-logging-filled.png)
+
+### 📊 Dashboard
+
+![Dashboard](screenshots/03-dashboard.png)
+
+### 🌐 Network Events
+
+![Events](screenshots/04-events.png)
+
+### 🚨 Alerts
+
+![Alerts](screenshots/05-alerts.png)
+
+### ⚙️ Policies
+
+![Policies](screenshots/06-policies.png)
+
+### 📑 Reports
+
+![Reports](screenshots/07-reports.png)
+
+### 📡 Monitoring
+
+![Monitoring](screenshots/08-monitoring.png)
+
+### 💻 Resources
+
+![Resources](screenshots/10-resources.png)
+
+### ⚡ Performance
+
+![Performance](screenshots/11-performance.png)
+
+### 📜 Logs
+
+![Logs](screenshots/12-logs.png)
+
+### 🎫 Tickets
+
+![Tickets](screenshots/13-tickets.png)
+
+### 🔁 Traffic Flow
+
+![Traffic](screenshots/14-traffic.png)
+
+### 🧠 Network Topology
+
+![Topology](screenshots/15-topology.png)
+
 ## Prerequisites
 - Node.js 18+ and npm
 - Python 3.10+
